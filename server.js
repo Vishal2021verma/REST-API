@@ -22,21 +22,30 @@ const articleSchema = new mongoose.Schema({
 });
 
 const Article = mongoose.model("Article", articleSchema);
-const myObj = [
-    {title: "REST", content: "REST is short for Representational State Transfer. It's an architectural style for desingning APIs. " },
-    {title: "API", content: "API stands for Aplication Proggramming Interface. It is a set of subroutine definitions, comunication protocals, and tools for building Software."},
-    {title: "Bootstrap", content: "This is a framework developed by Twitter that contains pre-made front-end templates for web design"}
-]
 
-// Article.insertMany(myObj,function(err){
-//     if(!err) console.log("Save");
-// });
+
 
 app.get("/articles", function(req,res){
     Article.find(function(err, foundArticle){
         res.send(foundArticle);
 
     });
+});
+
+app.post("/articles" , function(req, res){
+    console.log(req.body.title);
+    console.log(req.body.content);
+
+    const newArticle = new Article({
+        title:req.body.title,
+        content: req.body.content
+    });
+    newArticle.save(function(err){
+        if(!err){
+            res.status(200).send("Article Saved Successful");
+        }
+    });
+
 });
 app.listen(3000, function(){
     console.log("Server started on port 3000..");
