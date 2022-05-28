@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const ejs = require('ejs');
 const mongoose = require('mongoose');
+const { request } = require('express');
 
 const app = express();
 
@@ -22,10 +23,7 @@ const articleSchema = new mongoose.Schema({
 });
 
 const Article = mongoose.model("Article", articleSchema);
-
-
-
-
+///////////////////////////////// request for all article
 
 app.route("/articles").get(function (req, res) {
     Article.find(function (err, foundArticle) {
@@ -59,6 +57,20 @@ app.route("/articles").get(function (req, res) {
             }
         });
     })
+
+//////////////////////////////////////request for specific aritcle
+
+app.route("/articles/:articleTitle").get(function(req,res){
+    Article.findOne({title:req.params.articleTitle},function(err, foundArticle){
+        if(foundArticle){
+            res.status(200).send(foundArticle);
+        }
+        else{
+            res.status(200).send("No Article found.");
+        }
+    })
+
+})
 
 
 app.listen(3000, function () {
