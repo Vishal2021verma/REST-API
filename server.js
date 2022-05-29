@@ -71,6 +71,20 @@ app.route("/articles/:articleTitle").get(function(req,res){
     })
 
 })
+.put(function(req,res){
+    console.log(req.params.articleTitle);
+    Article.updateOne(
+        {title: req.params.articleTitle },
+        {title: req.body.title, content: req.body.content},
+        function(err){
+            if(!err){
+                res.send("Successfully updated article.");
+            }else{
+                res.send(err);
+            }
+        }
+    );
+});
 
 
 app.listen(3000, function () {
